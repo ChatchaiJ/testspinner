@@ -1,0 +1,61 @@
+<div class="container">
+<h1>Spinner</h1>
+
+<div id="start" class="btn btn-group">
+<a href="/done" class="btn btn-default">start</a>
+</div>
+
+<div id="spinner" class="spinner" style="display:none;">
+<h2>
+<span id="stopwatch">00:00:00</span>
+</h2>
+</div>
+</div>
+
+<script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/jquery.timer.js"></script>
+<script type="text/javascript">
+
+var t = new (function() {
+    var $stopwatch;
+    var incrementTime = 100;
+    var currentTime = 0;
+
+    $(function() {
+        $stopwatch = $('#stopwatch');
+        t.Timer = $.timer(updateTimer, incrementTime, false);  
+    });
+
+    function updateTimer() {
+        var timeString = formatTime(currentTime);
+        $stopwatch.html(timeString);
+        currentTime += incrementTime;
+    }
+
+});
+
+function pad(number, length) {
+    var str = '' + number;
+    while (str.length < length) {str = '0' + str;}
+    return str;
+}
+
+function formatTime(time) {
+    time = time / 10;
+    var min = parseInt(time / 6000),
+        sec = parseInt(time / 100) - (min * 60),
+        hundredths = pad(time - (sec * 100) - (min * 6000), 2);
+        return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2) + ":" + hundredths;
+
+    return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
+}
+
+$(document).ready(function(){
+    $("#start").click(function(){
+        $(this).hide();
+        $("#spinner").show();
+        t.Timer.play();
+    });
+}); 
+</script>
+
